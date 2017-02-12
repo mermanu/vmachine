@@ -75,7 +75,7 @@ public class VendingMachineTest {
         System.out.println("selectProduct");
         MachineContext context = new MachineContext(MachineState.WAITING_ORDER);
         MemoryEnum.DEFAULT_DATA.resetMemory();
-        fillContext(context);
+        fillContextWithProducts(context);
         VendingMachine instance = new VendingMachineOne(context);
 
         context.setState(MachineState.WAITING_ORDER);
@@ -127,7 +127,7 @@ public class VendingMachineTest {
         
         MachineContext context = new MachineContext(MachineState.WAITING_ORDER);
         MemoryEnum.DEFAULT_DATA.resetMemory();
-        fillContext(context);
+        fillContextWithProducts(context);
         VendingMachine instance = new VendingMachineOne(context);
        
         assertEquals(MachineConstants.SELECT_PRODUCT_FIRST_PLEASE, instance.requestProduct());
@@ -156,7 +156,7 @@ public class VendingMachineTest {
         System.out.println("cancelSelection");
         MachineContext context = new MachineContext(MachineState.WAITING_ORDER);
         MemoryEnum.DEFAULT_DATA.resetMemory();
-        fillContext(context);
+        fillContextWithProducts(context);
         VendingMachine instance = new VendingMachineOne(context);
         assertEquals(MachineConstants.THERE_IS_NO_SELECTION, instance.cancelSelection());
         
@@ -177,9 +177,9 @@ public class VendingMachineTest {
         System.out.println("refundCoins");
         MachineContext context = new MachineContext(MachineState.WAITING_ORDER);
         MemoryEnum.DEFAULT_DATA.resetMemory();
-        fillContext(context);
+        fillContextWithProducts(context);
         VendingMachine instance = new VendingMachineOne(context);
-        fillContext(context);
+        
         
         
         assertEquals(MachineConstants.PLEASE_WAIT_UNTIL_FINISH_THE_CURRENT_OPERATION, instance.refundCoins());
@@ -209,7 +209,7 @@ public class VendingMachineTest {
         assertEquals("2.6", instance.refundCoins());
     }
     
-    private void fillContext(MachineContext context){
+    private void fillContextWithProducts(MachineContext context){
         for (ProductsEnum products : ProductsEnum.values()) {
             context.getData().getProducts().put(products.name(), products.getMachineProduct());
             context.getData().getProductStock().put(products.name(), 0);
