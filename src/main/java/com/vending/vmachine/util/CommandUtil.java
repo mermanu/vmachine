@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.vending.vmachine.commands;
+package com.vending.vmachine.util;
 
 import com.vending.vmachine.coins.MachineCoin;
 import java.math.BigDecimal;

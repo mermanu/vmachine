@@ -5,6 +5,7 @@
  */
 package com.vending.vmachine;
 
+import com.vending.vmachine.common.MachineConstants;
 import com.vending.vmachine.coins.CoinsEnum;
 import com.vending.vmachine.context.MachineContext;
 import com.vending.vmachine.context.MachineState;
