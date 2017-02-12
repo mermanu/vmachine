@@ -52,19 +52,19 @@ public class VendingMachineTest {
         System.out.println("insertCoin");
         MachineContext context = new MachineContext(MachineState.WAITING_ORDER);
         MemoryEnum.DEFAULT_DATA.resetMemory();
-        VendingMachine instance = new VendingMachineOne(context);
+        VendingMachine vendingMachine = new VendingMachineOne(context);
 
-        assertEquals("1", instance.insertCoin(CoinsEnum.ONE.name()));
+        assertEquals("1", vendingMachine.insertCoin(CoinsEnum.ONE.name()));
         assertEquals(context.getState(), MachineState.COINS_IN_QUEUE);
-        assertEquals("2", instance.insertCoin(CoinsEnum.ONE.name()));
-        assertEquals("2.5", instance.insertCoin(CoinsEnum.HALF.name()));
-        assertEquals("2.55", instance.insertCoin(CoinsEnum.NICKEL.name()));
-        assertEquals("2.75", instance.insertCoin(CoinsEnum.FIFTH.name()));
-        assertEquals("2.85", instance.insertCoin(CoinsEnum.DIME.name()));
-        assertEquals("4.85", instance.insertCoin(CoinsEnum.TWO.name()));
+        assertEquals("2", vendingMachine.insertCoin(CoinsEnum.ONE.name()));
+        assertEquals("2.5", vendingMachine.insertCoin(CoinsEnum.HALF.name()));
+        assertEquals("2.55", vendingMachine.insertCoin(CoinsEnum.NICKEL.name()));
+        assertEquals("2.75", vendingMachine.insertCoin(CoinsEnum.FIFTH.name()));
+        assertEquals("2.85", vendingMachine.insertCoin(CoinsEnum.DIME.name()));
+        assertEquals("4.85", vendingMachine.insertCoin(CoinsEnum.TWO.name()));
 
         context.setState(MachineState.PRODUCT_SELECTED);
-        assertEquals(MachineConstants.PLEASE_WAIT_UNTIL_FINISH_THE_CURRENT_OPERATION, instance.insertCoin(CoinsEnum.ONE.name()));
+        assertEquals(MachineConstants.PLEASE_WAIT_UNTIL_FINISH_THE_CURRENT_OPERATION, vendingMachine.insertCoin(CoinsEnum.ONE.name()));
 
     }
 
@@ -77,45 +77,45 @@ public class VendingMachineTest {
         MachineContext context = new MachineContext(MachineState.WAITING_ORDER);
         MemoryEnum.DEFAULT_DATA.resetMemory();
         fillContextWithProducts(context);
-        VendingMachine instance = new VendingMachineOne(context);
+        VendingMachine vendingMachine = new VendingMachineOne(context);
 
         context.setState(MachineState.WAITING_ORDER);
-        assertEquals(MachineConstants.PLEASE_INSERT_COINS_TO_SELECT_THE_PRODUCT, instance.selectProduct(ProductsEnum.COKE.name()));
+        assertEquals(MachineConstants.PLEASE_INSERT_COINS_TO_SELECT_THE_PRODUCT, vendingMachine.selectProduct(ProductsEnum.COKE.name()));
 
-        instance.insertCoin(CoinsEnum.ONE.name());
-        assertEquals(MachineConstants.THERE_IS_NO_MORE + ProductsEnum.COKE.name(), instance.selectProduct(ProductsEnum.COKE.name()));
+        vendingMachine.insertCoin(CoinsEnum.ONE.name());
+        assertEquals(MachineConstants.THERE_IS_NO_MORE + ProductsEnum.COKE.name(), vendingMachine.selectProduct(ProductsEnum.COKE.name()));
 
         context.getData().getProductStock().put(ProductsEnum.COKE.name(), 1);
         assertEquals(MachineConstants.INSERT_MORE_COINS_PRICE_IS + ProductsEnum.COKE.getMachineProduct()
-                .getPrice(), instance.selectProduct(ProductsEnum.COKE.name()));
+                .getPrice(), vendingMachine.selectProduct(ProductsEnum.COKE.name()));
 
-        instance.insertCoin(CoinsEnum.NICKEL.name());
+        vendingMachine.insertCoin(CoinsEnum.NICKEL.name());
         assertEquals(MachineConstants.INSERT_MORE_COINS_PRICE_IS + ProductsEnum.COKE.getMachineProduct()
-                .getPrice(), instance.selectProduct(ProductsEnum.COKE.name()));
+                .getPrice(), vendingMachine.selectProduct(ProductsEnum.COKE.name()));
         
-        instance.insertCoin(CoinsEnum.DIME.name());
+        vendingMachine.insertCoin(CoinsEnum.DIME.name());
         assertEquals(MachineConstants.INSERT_MORE_COINS_PRICE_IS + ProductsEnum.COKE.getMachineProduct()
-                .getPrice(), instance.selectProduct(ProductsEnum.COKE.name()));
+                .getPrice(), vendingMachine.selectProduct(ProductsEnum.COKE.name()));
         
-        instance.insertCoin(CoinsEnum.DIME.name());
+        vendingMachine.insertCoin(CoinsEnum.DIME.name());
         assertEquals(MachineConstants.INSERT_MORE_COINS_PRICE_IS + ProductsEnum.COKE.getMachineProduct()
-                .getPrice(), instance.selectProduct(ProductsEnum.COKE.name()));
+                .getPrice(), vendingMachine.selectProduct(ProductsEnum.COKE.name()));
         
-        instance.insertCoin(CoinsEnum.NICKEL.name());
+        vendingMachine.insertCoin(CoinsEnum.NICKEL.name());
         assertEquals(MachineConstants.INSERT_MORE_COINS_PRICE_IS + ProductsEnum.COKE.getMachineProduct()
-                .getPrice(), instance.selectProduct(ProductsEnum.COKE.name()));
+                .getPrice(), vendingMachine.selectProduct(ProductsEnum.COKE.name()));
         
-        instance.insertCoin(CoinsEnum.FIFTH.name());
-        assertEquals(MachineConstants.PRODUCT_SELECTED + ProductsEnum.COKE.name(), instance.selectProduct(ProductsEnum.COKE.name()));
+        vendingMachine.insertCoin(CoinsEnum.FIFTH.name());
+        assertEquals(MachineConstants.PRODUCT_SELECTED + ProductsEnum.COKE.name(), vendingMachine.selectProduct(ProductsEnum.COKE.name()));
 
         context.setState(MachineState.COINS_IN_QUEUE);
-        instance.insertCoin(CoinsEnum.NICKEL.name());
-        assertEquals(MachineConstants.PRODUCT_SELECTED + ProductsEnum.COKE.name(), instance.selectProduct(ProductsEnum.COKE.name()));
+        vendingMachine.insertCoin(CoinsEnum.NICKEL.name());
+        assertEquals(MachineConstants.PRODUCT_SELECTED + ProductsEnum.COKE.name(), vendingMachine.selectProduct(ProductsEnum.COKE.name()));
 
         assertEquals(context.getData().getSelectedProduct(), ProductsEnum.COKE.getMachineProduct());
         
         context.setState(MachineState.COINS_IN_QUEUE);
-        assertEquals(MachineConstants.PRODUCT_CODE_DOES_NOT_EXIST, instance.selectProduct("NOEXIST"));
+        assertEquals(MachineConstants.PRODUCT_CODE_DOES_NOT_EXIST, vendingMachine.selectProduct("NOEXIST"));
 
     }
 
@@ -129,22 +129,22 @@ public class VendingMachineTest {
         MachineContext context = new MachineContext(MachineState.WAITING_ORDER);
         MemoryEnum.DEFAULT_DATA.resetMemory();
         fillContextWithProducts(context);
-        VendingMachine instance = new VendingMachineOne(context);
+        VendingMachine vendingMachine = new VendingMachineOne(context);
        
-        assertEquals(MachineConstants.SELECT_PRODUCT_FIRST_PLEASE, instance.requestProduct());
+        assertEquals(MachineConstants.SELECT_PRODUCT_FIRST_PLEASE, vendingMachine.requestProduct());
         
         assertEquals(null, context.getData().getCoinsRepository().get(CoinsEnum.TWO.name()));
         
         context.getData().getProductStock().put(ProductsEnum.COKE.name(), 1);
-        instance.insertCoin(CoinsEnum.TWO.name());
-        instance.selectProduct(ProductsEnum.COKE.name());
-        assertEquals(MachineConstants.PRODUCT_DELIVERED, instance.requestProduct());
+        vendingMachine.insertCoin(CoinsEnum.TWO.name());
+        vendingMachine.selectProduct(ProductsEnum.COKE.name());
+        assertEquals(MachineConstants.PRODUCT_DELIVERED, vendingMachine.requestProduct());
         assertEquals(Integer.valueOf(1), context.getData().getCoinsRepository().get(CoinsEnum.TWO.name()));
         
         context.setState(MachineState.WAITING_ORDER);
-        instance.insertCoin(CoinsEnum.TWO.name());
-        instance.selectProduct(ProductsEnum.COKE.name());
-        assertEquals(MachineConstants.PRODUCT_DELIVERED, instance.requestProduct());
+        vendingMachine.insertCoin(CoinsEnum.TWO.name());
+        vendingMachine.selectProduct(ProductsEnum.COKE.name());
+        assertEquals(MachineConstants.PRODUCT_DELIVERED, vendingMachine.requestProduct());
         assertEquals(Integer.valueOf(2), context.getData().getCoinsRepository().get(CoinsEnum.TWO.name()));
         
     }
@@ -158,13 +158,13 @@ public class VendingMachineTest {
         MachineContext context = new MachineContext(MachineState.WAITING_ORDER);
         MemoryEnum.DEFAULT_DATA.resetMemory();
         fillContextWithProducts(context);
-        VendingMachine instance = new VendingMachineOne(context);
-        assertEquals(MachineConstants.THERE_IS_NO_SELECTION, instance.cancelSelection());
+        VendingMachine vendingMachine = new VendingMachineOne(context);
+        assertEquals(MachineConstants.THERE_IS_NO_SELECTION, vendingMachine.cancelSelection());
         
         context.getData().getProductStock().put(ProductsEnum.PEPSI.name(), 1);
-        instance.insertCoin(CoinsEnum.TWO.name());
-        instance.selectProduct(ProductsEnum.PEPSI.name());
-        assertEquals(MachineConstants.OPERATION_CANCELED, instance.cancelSelection());
+        vendingMachine.insertCoin(CoinsEnum.TWO.name());
+        vendingMachine.selectProduct(ProductsEnum.PEPSI.name());
+        assertEquals(MachineConstants.OPERATION_CANCELED, vendingMachine.cancelSelection());
         
         assertEquals(BigDecimal.valueOf(2), context.getData().getRefund());
         assertEquals(MachineState.SELECTION_CANCELED, context.getState());
@@ -179,35 +179,35 @@ public class VendingMachineTest {
         MachineContext context = new MachineContext(MachineState.WAITING_ORDER);
         MemoryEnum.DEFAULT_DATA.resetMemory();
         fillContextWithProducts(context);
-        VendingMachine instance = new VendingMachineOne(context);
+        VendingMachine vendingMachine = new VendingMachineOne(context);
         
         
         
-        assertEquals(MachineConstants.PLEASE_WAIT_UNTIL_FINISH_THE_CURRENT_OPERATION, instance.refundCoins());
+        assertEquals(MachineConstants.PLEASE_WAIT_UNTIL_FINISH_THE_CURRENT_OPERATION, vendingMachine.refundCoins());
         
         context.getData().getProductStock().put(ProductsEnum.COKE.name(), 1);
-        instance.insertCoin(CoinsEnum.TWO.name());
-        instance.selectProduct(ProductsEnum.COKE.name());
-        assertEquals(MachineConstants.PRODUCT_DELIVERED, instance.requestProduct());
+        vendingMachine.insertCoin(CoinsEnum.TWO.name());
+        vendingMachine.selectProduct(ProductsEnum.COKE.name());
+        assertEquals(MachineConstants.PRODUCT_DELIVERED, vendingMachine.requestProduct());
         assertEquals(Integer.valueOf(1), context.getData().getCoinsRepository().get(CoinsEnum.TWO.name()));
-        assertEquals("0.5", instance.refundCoins());
+        assertEquals("0.5", vendingMachine.refundCoins());
         
-        instance.insertCoin(CoinsEnum.ONE.name());
-        assertEquals("1", instance.refundCoins());
-        
-        context.getData().getProductStock().put(ProductsEnum.COKE.name(), 1);
-        instance.insertCoin(CoinsEnum.TWO.name());
-        instance.selectProduct(ProductsEnum.COKE.name());
-        instance.cancelSelection();
-        assertEquals("2", instance.refundCoins());
+        vendingMachine.insertCoin(CoinsEnum.ONE.name());
+        assertEquals("1", vendingMachine.refundCoins());
         
         context.getData().getProductStock().put(ProductsEnum.COKE.name(), 1);
-        instance.insertCoin(CoinsEnum.TWO.name());
-        instance.insertCoin(CoinsEnum.HALF.name());
-        instance.insertCoin(CoinsEnum.DIME.name());
-        instance.selectProduct(ProductsEnum.COKE.name());
-        instance.cancelSelection();
-        assertEquals("2.6", instance.refundCoins());
+        vendingMachine.insertCoin(CoinsEnum.TWO.name());
+        vendingMachine.selectProduct(ProductsEnum.COKE.name());
+        vendingMachine.cancelSelection();
+        assertEquals("2", vendingMachine.refundCoins());
+        
+        context.getData().getProductStock().put(ProductsEnum.COKE.name(), 1);
+        vendingMachine.insertCoin(CoinsEnum.TWO.name());
+        vendingMachine.insertCoin(CoinsEnum.HALF.name());
+        vendingMachine.insertCoin(CoinsEnum.DIME.name());
+        vendingMachine.selectProduct(ProductsEnum.COKE.name());
+        vendingMachine.cancelSelection();
+        assertEquals("2.6", vendingMachine.refundCoins());
     }
     
     private void fillContextWithProducts(MachineContext context){
